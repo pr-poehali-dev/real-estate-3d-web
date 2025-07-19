@@ -213,10 +213,25 @@ const Index = () => {
               <br />
               <span className="text-4xl md:text-6xl">мечты</span>
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-2xl mx-auto leading-relaxed">
-              Найдём идеальный дом, квартиру или коммерческую недвижимость. 
-              Профессиональное сопровождение на всех этапах сделки.
-            </p>
+            <div className="mb-8">
+              <div className="flex items-center justify-center mb-4">
+                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border-2 border-white/30 mr-4">
+                  <Icon name="User" size={40} className="text-white" />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-2xl font-bold text-white">Владимир Юшков</h3>
+                  <p className="text-blue-200">Ваш персональный агент по недвижимости</p>
+                  <div className="flex items-center mt-1">
+                    <Icon name="Award" size={16} className="text-yellow-300 mr-1" />
+                    <span className="text-yellow-200 text-sm font-medium">7+ сделок ежемесячно</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-xl md:text-2xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
+                Найдём идеальный дом, квартиру или коммерческую недвижимость. 
+                Профессиональное сопровождение на всех этапах сделки.
+              </p>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8 py-4 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
                 <Icon name="Search" size={20} className="mr-2" />
@@ -534,10 +549,10 @@ const Index = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { number: "2,547", label: "Довольных клиентов", icon: "Users", color: "blue" },
-              { number: "15+", label: "Лет на рынке", icon: "Calendar", color: "green" },
+              { number: "147", label: "Довольных клиентов", icon: "Users", color: "blue" },
+              { number: "7", label: "Сделок в месяц", icon: "TrendingUp", color: "green" },
               { number: "98%", label: "Успешных сделок", icon: "Award", color: "purple" },
-              { number: "24/7", label: "Поддержка клиентов", icon: "Headphones", color: "orange" }
+              { number: "5+", label: "Лет опыта", icon: "Calendar", color: "orange" }
             ].map((stat, index) => (
               <Card key={index} className="text-center p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
                 <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center bg-${stat.color}-100`}>
@@ -670,22 +685,22 @@ const Index = () => {
               <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Icon name="Phone" size={24} />
               </div>
-              <h3 className="font-semibold mb-2">Телефон</h3>
-              <p className="text-blue-100">+7 (495) 123-45-67</p>
+              <h3 className="font-semibold mb-2">Владимир Юшков</h3>
+              <p className="text-blue-100">+7 (926) 555-01-23</p>
             </div>
             <div className="text-center text-white">
               <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Icon name="Mail" size={24} />
               </div>
               <h3 className="font-semibold mb-2">Email</h3>
-              <p className="text-blue-100">info@realestate.ru</p>
+              <p className="text-blue-100">v.yushkov@realestate.pro</p>
             </div>
             <div className="text-center text-white">
               <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Icon name="MapPin" size={24} />
               </div>
               <h3 className="font-semibold mb-2">Офис</h3>
-              <p className="text-blue-100">Москва, ул. Тверская, 15</p>
+              <p className="text-blue-100">Москва, Садовническая наб., 69</p>
             </div>
           </div>
         </div>
@@ -696,10 +711,10 @@ const Index = () => {
         <div className="max-w-7xl mx-auto text-center">
           <div className="flex items-center justify-center mb-6">
             <Icon name="Building2" size={32} className="text-blue-400 mr-3" />
-            <span className="text-2xl font-bold">RealEstate Pro</span>
+            <span className="text-2xl font-bold">Владимир Юшков</span>
           </div>
           <p className="text-slate-400 mb-6">
-            Ваш надёжный партнёр в мире недвижимости
+            Персональный агент по недвижимости • 7 сделок в месяц
           </p>
           <div className="flex justify-center space-x-6">
             <Icon name="Facebook" size={24} className="text-slate-400 hover:text-white cursor-pointer transition-colors" />
