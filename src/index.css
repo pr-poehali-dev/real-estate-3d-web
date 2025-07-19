@@ -113,6 +113,14 @@
     transform: rotateY(12deg);
   }
 
+  .rotate-y-\[-120deg\] {
+    transform: rotateY(-120deg);
+  }
+
+  .rotate-y-\[120deg\] {
+    transform: rotateY(120deg);
+  }
+
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }

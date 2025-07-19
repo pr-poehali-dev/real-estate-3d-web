@@ -4,15 +4,118 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { Slider } from '@/components/ui/slider';
+import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [doorOpen, setDoorOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [activeProperty, setActiveProperty] = useState(0);
+  
+  // Mortgage Calculator State
+  const [loanAmount, setLoanAmount] = useState([5000000]);
+  const [downPayment, setDownPayment] = useState([1000000]);
+  const [loanTerm, setLoanTerm] = useState([20]);
+  const [interestRate, setInterestRate] = useState([12]);
 
   useEffect(() => {
-    setIsVisible(true);
+    // Door opening animation sequence
+    const timer1 = setTimeout(() => {
+      setDoorOpen(true);
+    }, 1000);
+
+    const timer2 = setTimeout(() => {
+      setIsLoading(false);
+      setIsVisible(true);
+    }, 2500);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
   }, []);
+
+  // Mortgage calculation
+  const calculateMonthlyPayment = () => {
+    const principal = loanAmount[0] - downPayment[0];
+    const monthlyRate = interestRate[0] / 100 / 12;
+    const numberOfPayments = loanTerm[0] * 12;
+    
+    if (monthlyRate === 0) return principal / numberOfPayments;
+    
+    const monthlyPayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
+                          (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+    
+    return monthlyPayment;
+  };
+
+  const monthlyPayment = calculateMonthlyPayment();
+  const totalPayment = monthlyPayment * loanTerm[0] * 12;
+  const totalInterest = totalPayment - (loanAmount[0] - downPayment[0]);
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-slate-900 flex items-center justify-center overflow-hidden">
+        {/* 3D Door Animation */}
+        <div className="relative w-96 h-96 perspective-1000">
+          <div className="relative w-full h-full transform-style-preserve-3d">
+            {/* Door Frame */}
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-800 to-amber-900 rounded-lg shadow-2xl">
+              <div className="absolute inset-2 bg-gradient-to-br from-amber-700 to-amber-800 rounded-md"></div>
+            </div>
+            
+            {/* Left Door */}
+            <div 
+              className={`absolute left-0 top-0 w-1/2 h-full bg-gradient-to-br from-amber-600 to-amber-800 rounded-l-lg shadow-xl transform-origin-left transition-transform duration-1500 ease-out ${
+                doorOpen ? 'rotate-y-[-120deg]' : ''
+              }`}
+              style={{ transformOrigin: 'left center' }}
+            >
+              <div className="absolute right-4 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-yellow-400 rounded-full shadow-lg"></div>
+              <div className="absolute inset-2 border-2 border-amber-500/30 rounded-l-md"></div>
+            </div>
+            
+            {/* Right Door */}
+            <div 
+              className={`absolute right-0 top-0 w-1/2 h-full bg-gradient-to-br from-amber-600 to-amber-800 rounded-r-lg shadow-xl transform-origin-right transition-transform duration-1500 ease-out ${
+                doorOpen ? 'rotate-y-[120deg]' : ''
+              }`}
+              style={{ transformOrigin: 'right center' }}
+            >
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-yellow-400 rounded-full shadow-lg"></div>
+              <div className="absolute inset-2 border-2 border-amber-500/30 rounded-r-md"></div>
+            </div>
+
+            {/* Light coming through the door */}
+            {doorOpen && (
+              <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-blue-200/30 to-blue-400/40 rounded-lg animate-pulse">
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent"></div>
+              </div>
+            )}
+          </div>
+          
+          {/* Door Handle Light Effect */}
+          {doorOpen && (
+            <div className="absolute inset-0 animate-pulse">
+              <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-yellow-300 rounded-full blur-sm"></div>
+              <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-yellow-300 rounded-full blur-sm"></div>
+            </div>
+          )}
+        </div>
+
+        {/* Loading Text */}
+        <div className="absolute bottom-20 text-center text-white">
+          <div className="flex items-center space-x-2 mb-4">
+            <Icon name="Home" size={24} className="text-blue-400" />
+            <span className="text-2xl font-bold">RealEstate Pro</span>
+          </div>
+          <p className="text-blue-200 animate-pulse">Открываем двери в мир недвижимости...</p>
+        </div>
+      </div>
+    );
+  }
 
   const properties = [
     {
@@ -235,6 +338,274 @@ const Index = () => {
                     {service.description}
                   </CardDescription>
                 </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Mortgage Calculator Section */}
+      <section className="py-20 px-6 bg-gradient-to-br from-blue-50 to-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">
+              🧮 Калькулятор ипотеки
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-6">
+              Рассчитайте ипотеку
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Узнайте точную сумму ежемесячного платежа и переплаты
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Calculator Controls */}
+            <Card className="p-8 bg-white shadow-xl border-0">
+              <CardHeader className="pb-6">
+                <CardTitle className="text-2xl text-slate-800">Параметры кредита</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-8">
+                {/* Loan Amount */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-lg font-medium text-slate-700">Стоимость недвижимости</label>
+                    <span className="text-xl font-bold text-blue-600">{loanAmount[0].toLocaleString('ru-RU')} ₽</span>
+                  </div>
+                  <Slider
+                    value={loanAmount}
+                    onValueChange={setLoanAmount}
+                    max={50000000}
+                    min={1000000}
+                    step={100000}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>1 млн ₽</span>
+                    <span>50 млн ₽</span>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Down Payment */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-lg font-medium text-slate-700">Первоначальный взнос</label>
+                    <span className="text-xl font-bold text-green-600">{downPayment[0].toLocaleString('ru-RU')} ₽</span>
+                  </div>
+                  <Slider
+                    value={downPayment}
+                    onValueChange={setDownPayment}
+                    max={loanAmount[0] * 0.8}
+                    min={loanAmount[0] * 0.1}
+                    step={50000}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>{Math.round((downPayment[0] / loanAmount[0]) * 100)}% от стоимости</span>
+                    <span>Рекомендуемый: 20%</span>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Loan Term */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-lg font-medium text-slate-700">Срок кредита</label>
+                    <span className="text-xl font-bold text-purple-600">{loanTerm[0]} лет</span>
+                  </div>
+                  <Slider
+                    value={loanTerm}
+                    onValueChange={setLoanTerm}
+                    max={30}
+                    min={5}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>5 лет</span>
+                    <span>30 лет</span>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Interest Rate */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-lg font-medium text-slate-700">Процентная ставка</label>
+                    <span className="text-xl font-bold text-orange-600">{interestRate[0]}% годовых</span>
+                  </div>
+                  <Slider
+                    value={interestRate}
+                    onValueChange={setInterestRate}
+                    max={20}
+                    min={3}
+                    step={0.1}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>3%</span>
+                    <span>20%</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Results */}
+            <div className="space-y-6">
+              <Card className="p-8 bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-xl border-0">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-white">Результат расчёта</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
+                      <Icon name="CreditCard" size={32} className="mx-auto mb-2 text-blue-200" />
+                      <p className="text-blue-200 text-sm">Ежемесячный платёж</p>
+                      <p className="text-2xl font-bold">{Math.round(monthlyPayment).toLocaleString('ru-RU')} ₽</p>
+                    </div>
+                    <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
+                      <Icon name="PiggyBank" size={32} className="mx-auto mb-2 text-green-200" />
+                      <p className="text-green-200 text-sm">Сумма кредита</p>
+                      <p className="text-2xl font-bold">{(loanAmount[0] - downPayment[0]).toLocaleString('ru-RU')} ₽</p>
+                    </div>
+                  </div>
+                  
+                  <Separator className="bg-white/20" />
+                  
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span className="text-blue-200">Общая сумма выплат:</span>
+                      <span className="font-bold">{Math.round(totalPayment).toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-blue-200">Переплата по кредиту:</span>
+                      <span className="font-bold text-orange-200">{Math.round(totalInterest).toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-blue-200">Эффективная ставка:</span>
+                      <span className="font-bold">{((totalInterest / (loanAmount[0] - downPayment[0])) * 100).toFixed(1)}%</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Additional Info Cards */}
+              <div className="grid grid-cols-2 gap-4">
+                <Card className="p-6 bg-green-50 border-green-200">
+                  <div className="text-center">
+                    <Icon name="TrendingUp" size={24} className="mx-auto mb-2 text-green-600" />
+                    <p className="text-sm text-green-700 mb-1">Одобрение</p>
+                    <p className="font-bold text-green-800">95%</p>
+                  </div>
+                </Card>
+                <Card className="p-6 bg-orange-50 border-orange-200">
+                  <div className="text-center">
+                    <Icon name="Clock" size={24} className="mx-auto mb-2 text-orange-600" />
+                    <p className="text-sm text-orange-700 mb-1">Рассмотрение</p>
+                    <p className="font-bold text-orange-800">1-3 дня</p>
+                  </div>
+                </Card>
+              </div>
+
+              <Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700 text-lg py-4">
+                <Icon name="FileText" size={20} className="mr-2" />
+                Подать заявку на ипотеку
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Statistics Section */}
+      <section className="py-20 px-6 bg-slate-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-slate-100 text-slate-700 hover:bg-slate-200">
+              📊 Наши достижения
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-6">
+              Цифры говорят сами за себя
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { number: "2,547", label: "Довольных клиентов", icon: "Users", color: "blue" },
+              { number: "15+", label: "Лет на рынке", icon: "Calendar", color: "green" },
+              { number: "98%", label: "Успешных сделок", icon: "Award", color: "purple" },
+              { number: "24/7", label: "Поддержка клиентов", icon: "Headphones", color: "orange" }
+            ].map((stat, index) => (
+              <Card key={index} className="text-center p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
+                <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center bg-${stat.color}-100`}>
+                  <Icon name={stat.icon} size={32} className={`text-${stat.color}-600`} />
+                </div>
+                <h3 className="text-3xl font-bold text-slate-800 mb-2">{stat.number}</h3>
+                <p className="text-gray-600">{stat.label}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">
+              🛣️ Как мы работаем
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-6">
+              Простой процесс покупки
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Всего 4 шага до ключей от вашего нового дома
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { 
+                step: "01", 
+                title: "Консультация", 
+                description: "Определяем ваши потребности и бюджет",
+                icon: "MessageSquare",
+                color: "bg-blue-500"
+              },
+              { 
+                step: "02", 
+                title: "Поиск объектов", 
+                description: "Подбираем варианты под ваши критерии",
+                icon: "Search",
+                color: "bg-green-500"
+              },
+              { 
+                step: "03", 
+                title: "Показы и выбор", 
+                description: "Осматриваем понравившиеся объекты",
+                icon: "Eye",
+                color: "bg-purple-500"
+              },
+              { 
+                step: "04", 
+                title: "Оформление сделки", 
+                description: "Полное сопровождение до получения ключей",
+                icon: "Key",
+                color: "bg-orange-500"
+              }
+            ].map((process, index) => (
+              <Card key={index} className="relative p-8 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-slate-800 text-white rounded-xl flex items-center justify-center font-bold text-lg">
+                  {process.step}
+                </div>
+                <div className={`w-16 h-16 ${process.color} rounded-2xl flex items-center justify-center mb-6 mx-auto`}>
+                  <Icon name={process.icon} size={32} className="text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">{process.title}</h3>
+                <p className="text-gray-600 text-center">{process.description}</p>
               </Card>
             ))}
           </div>
