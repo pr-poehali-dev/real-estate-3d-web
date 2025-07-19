@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
@@ -125,7 +126,12 @@ const Index = () => {
       area: "120 м²",
       rooms: "3 комнаты",
       description: "Просторная квартира с панорамными окнами и современным ремонтом",
-      image: "/img/9ef40a36-2475-4cdb-a6eb-662893af2326.jpg"
+      image: "/img/9ef40a36-2475-4cdb-a6eb-662893af2326.jpg",
+      fullDescription: "Эксклюзивная трёхкомнатная квартира в самом сердце города. Панорамные окна от пола до потолка открывают захватывающий вид на исторический центр. Европейский ремонт выполнен из премиальных материалов.",
+      features: ["Панорамные окна", "Премиум ремонт", "Центральное расположение", "Консьерж-сервис", "Подземный паркинг"],
+      floor: "15/25",
+      metro: "Театральная - 3 мин",
+      year: "2022"
     },
     {
       id: 2,
@@ -134,7 +140,12 @@ const Index = () => {
       area: "250 м²",
       rooms: "5 комнат",
       description: "Уютный дом с участком и всеми удобствами",
-      image: "/img/5339d9fc-ed2d-4325-ba84-b4827570bb27.jpg"
+      image: "/img/5339d9fc-ed2d-4325-ba84-b4827570bb27.jpg",
+      fullDescription: "Современный двухэтажный дом в престижном коттеджном посёлке. Большой участок с ландшафтным дизайном, собственный гараж и все коммуникации. Идеально для семьи с детьми.",
+      features: ["Участок 15 соток", "Гараж на 2 авто", "Сауна и бассейн", "Система умный дом", "Охраняемая территория"],
+      floor: "2 этажа",
+      metro: "30 мин до МКАД",
+      year: "2021"
     },
     {
       id: 3,
@@ -143,7 +154,12 @@ const Index = () => {
       area: "85 м²",
       rooms: "Офис",
       description: "Идеально для бизнеса в престижном районе",
-      image: "/img/6184f795-4fc4-45e5-bd2b-e1697268e917.jpg"
+      image: "/img/6184f795-4fc4-45e5-bd2b-e1697268e917.jpg",
+      fullDescription: "Готовый офис в современном бизнес-центре класса А. Высокие потолки, просторная планировка, отдельный вход. Вся инфраструктура для ведения бизнеса на месте.",
+      features: ["Отдельный вход", "Кондиционирование", "Охрана 24/7", "Парковка", "Рядом с метро"],
+      floor: "3/12",
+      metro: "Маяковская - 2 мин",
+      year: "2020"
     }
   ];
 
@@ -241,9 +257,10 @@ const Index = () => {
                 variant="outline" 
                 size="lg" 
                 className="border-white/30 text-white hover:bg-white/10 text-lg px-8 py-4 rounded-xl backdrop-blur-sm transition-all duration-300 hover:scale-105"
+                onClick={() => window.open('https://wa.me/79641480392?text=Здравствуйте! Хочу получить консультацию по недвижимости', '_blank')}
               >
-                <Icon name="Phone" size={20} className="mr-2" />
-                Консультация
+                <Icon name="MessageCircle" size={20} className="mr-2" />
+                Консультация в WhatsApp
               </Button>
             </div>
           </div>
@@ -308,10 +325,103 @@ const Index = () => {
                       <Badge variant="outline">{property.rooms}</Badge>
                     </div>
                   </div>
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 hover:shadow-lg">
-                    <Icon name="Eye" size={16} className="mr-2" />
-                    Подробнее
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 hover:shadow-lg">
+                        <Icon name="Eye" size={16} className="mr-2" />
+                        Подробнее
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle className="text-2xl font-bold text-slate-800">{property.title}</DialogTitle>
+                        <DialogDescription className="text-lg text-blue-600 font-semibold">
+                          {property.price}
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      <div className="grid md:grid-cols-2 gap-6 mt-6">
+                        {/* Property Image */}
+                        <div className="space-y-4">
+                          <img 
+                            src={property.image} 
+                            alt={property.title}
+                            className="w-full h-64 object-cover rounded-lg shadow-lg"
+                          />
+                          <div className="grid grid-cols-3 gap-2 text-center">
+                            <div className="p-3 bg-blue-50 rounded-lg">
+                              <Icon name="Home" size={20} className="mx-auto mb-1 text-blue-600" />
+                              <p className="text-sm font-medium">{property.area}</p>
+                            </div>
+                            <div className="p-3 bg-green-50 rounded-lg">
+                              <Icon name="Users" size={20} className="mx-auto mb-1 text-green-600" />
+                              <p className="text-sm font-medium">{property.rooms}</p>
+                            </div>
+                            <div className="p-3 bg-purple-50 rounded-lg">
+                              <Icon name="Building" size={20} className="mx-auto mb-1 text-purple-600" />
+                              <p className="text-sm font-medium">{property.floor}</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Property Details */}
+                        <div className="space-y-6">
+                          <div>
+                            <h3 className="text-lg font-semibold text-slate-800 mb-3">Описание</h3>
+                            <p className="text-gray-600 leading-relaxed">{property.fullDescription}</p>
+                          </div>
+                          
+                          <div>
+                            <h3 className="text-lg font-semibold text-slate-800 mb-3">Основные характеристики</h3>
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Площадь:</span>
+                                <span className="font-medium">{property.area}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Этаж:</span>
+                                <span className="font-medium">{property.floor}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Метро:</span>
+                                <span className="font-medium">{property.metro}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Год:</span>
+                                <span className="font-medium">{property.year}</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <h3 className="text-lg font-semibold text-slate-800 mb-3">Особенности</h3>
+                            <div className="grid grid-cols-1 gap-2">
+                              {property.features.map((feature, idx) => (
+                                <div key={idx} className="flex items-center">
+                                  <Icon name="Check" size={16} className="text-green-600 mr-2" />
+                                  <span className="text-sm text-gray-600">{feature}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-3">
+                            <Button 
+                              className="w-full bg-green-600 hover:bg-green-700"
+                              onClick={() => window.open('https://wa.me/79641480392?text=Здравствуйте! Интересует объект: ' + encodeURIComponent(property.title), '_blank')}
+                            >
+                              <Icon name="MessageCircle" size={16} className="mr-2" />
+                              Связаться по WhatsApp
+                            </Button>
+                            <Button variant="outline" className="w-full">
+                              <Icon name="Phone" size={16} className="mr-2" />
+                              Позвонить агенту
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </CardContent>
               </Card>
             ))}
@@ -526,9 +636,13 @@ const Index = () => {
                 </Card>
               </div>
 
-              <Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700 text-lg py-4">
-                <Icon name="FileText" size={20} className="mr-2" />
-                Подать заявку на ипотеку
+              <Button 
+                size="lg" 
+                className="w-full bg-blue-600 hover:bg-blue-700 text-lg py-4"
+                onClick={() => window.open('https://wa.me/79641480392?text=Здравствуйте! Хочу подать заявку на ипотеку', '_blank')}
+              >
+                <Icon name="MessageCircle" size={20} className="mr-2" />
+                Подать заявку через WhatsApp
               </Button>
             </div>
           </div>
@@ -671,9 +785,10 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="w-full bg-white text-slate-800 hover:bg-blue-50 text-lg py-4 font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  onClick={() => window.open('https://wa.me/79641480392?text=Здравствуйте! Хочу оставить заявку на консультацию по недвижимости', '_blank')}
                 >
-                  <Icon name="Send" size={20} className="mr-2" />
-                  Отправить заявку
+                  <Icon name="MessageCircle" size={20} className="mr-2" />
+                  Отправить заявку в WhatsApp
                 </Button>
               </form>
             </CardContent>
@@ -686,7 +801,7 @@ const Index = () => {
                 <Icon name="Phone" size={24} />
               </div>
               <h3 className="font-semibold mb-2">Владимир Юшков</h3>
-              <p className="text-blue-100">+7 (926) 555-01-23</p>
+              <p className="text-blue-100">+7 (964) 148-03-92</p>
             </div>
             <div className="text-center text-white">
               <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
